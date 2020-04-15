@@ -1,3 +1,39 @@
+# Issues
+1. macOS Catalina, linecache.py
+```python
+#linecache.py
+def getlines(filename, module_globals=None):
+    """Get the lines for a Python source file from the cache.
+    Update the cache if it doesn't contain an entry for this file already."""
+
+    if filename in cache:
+        entry = cache[filename]
+        if len(entry) != 1:
+            return cache[filename][2]
+
+    try:
+        if module_globals is None:
+            #변경부분
+            v = sys.modules.copy()
+            for mod in v:
+            #변경종료
+                if getattr(mod, '__file__', None) == filename:
+                    module_globals = mod.__dict__
+                    break
+        return updatecache(filename, module_globals)
+    except MemoryError:
+        clearcache()
+        return []
+
+```
+2. cv2 has no member
+- command+shift+p -> open settings (settings.json)
+```
+{
+    "python.linting.pylintArgs": ["--generate-members"]
+}
+```
+
 # BeautyGAN
 
 See [test.ipynb](test.ipynb), includes:
